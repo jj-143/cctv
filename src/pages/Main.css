@@ -1,0 +1,16 @@
+.main {
+  display: flex;
+  height: 100%;
+}
+.menuButton {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 500;
+}
+
+@media (min-width: 600px) {
+  .menuButton {
+    display: none;
+  }
+}

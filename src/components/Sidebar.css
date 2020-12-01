@@ -1,0 +1,31 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  /* highest leaflet element: 1000 */
+  z-index: 10000;
+  transform: translateX(-100%);
+  transition: transform 0.4s;
+  background-color: white;
+}
+
+.sidebar.show {
+  transform: translateX(0%);
+}
+
+.inner {
+  margin-top: 0rem;
+  height: 100%;
+}
+@media (min-width: 600px) {
+  .sidebar {
+    position: static;
+    width: 300px;
+    z-index: 1;
+    transform: translateX(0%);
+    padding: 2rem 1rem 1rem 3rem;
+    box-sizing: border-box;
+  }
+}

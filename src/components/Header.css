@@ -1,0 +1,11 @@
+.header {
+  height: 60px;
+  box-shadow: 2px 0px 8px rgba(0, 0, 0, 0.15);
+  background-color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 3rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  z-index: 10;
+}
