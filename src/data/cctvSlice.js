@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit"
 
 const URL_CCTV = `http://apis.data.go.kr/6260000/CctvInfoService/getItsCctvInfoList?serviceKey=OJW0MRmGQd9eUmoOVh%2Fdk%2FXyd%2FM53%2FWpZf4b8wUEqR4tUaPNyYGgUBzhu1xJyoZNyHpCsj8r42trJzWAxi9B7Q%3D%3D&pageNo=1&numOfRows=100&resultType=json`
+
+const cctvUrl = page => `https://jj-cctv-backend.herokuapp.com/cctv/${page}`
 // const URL_CCTV = `http://localhost:9191/mock2.json`
 
 const cctvAdapter = createEntityAdapter({
@@ -16,7 +18,7 @@ export const fetchCCTVs = createAsyncThunk("cctvs/fetchCCTVs", async () => {
   let response
   try {
     // CORS error
-    response = await fetch(URL_CCTV).then(d => d.json())
+    response = await fetch(cctvUrl(1)).then(d => d.json())
   } catch {
     // fallback
     console.log("using fallback data")
