@@ -1,26 +1,17 @@
-import React, { useState, useLayoutEffect, useRef } from "react"
+import React, { useState, useLayoutEffect, useRef, useCallback, useEffect } from "react"
+import ReactDOM from "react-dom"
 import styles from "./MapView.css"
 const url = `https://its.busan.go.kr/traffic/exclude/cctvPopup.do?cctvid=261&title=문전교차로(하).진구&isvr=undefined`
 
-import { data as cc } from "../data/mockCCTVdata"
+import { selectAllCCTVs, setSelectedCCTV, viewCCTV } from "../data/cctvSlice"
+import { useDispatch, useSelector } from "react-redux"
 
-const dongnae = [35.2, 129.1]
-
-function addMarker(map, latlong, msg) {
-  let [lat, long] = latlong
-  let marker = L.marker([lat, long])
-    .addTo(map)
-    .bindPopup(
-      `<div>
-      ${msg}
-      </div>`,
-    )
-    .openPopup()
-}
+const dongnae = ["35.16539", "129.12561"]
 
 function setupLeaflet() {
   let map = L.map("map", {}).setView(dongnae, 13)
   map.zoomControl.setPosition("topright")
+
   L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
     {
@@ -34,11 +25,49 @@ function setupLeaflet() {
         "pk.eyJ1IjoiamotZGV2IiwiYSI6ImNraTVtdnkxYjJpbmsycW5tdHpuY2k2ZWUifQ.Nrnc_lOpmYM97HxBgO_RLA",
     },
   ).addTo(map)
+
   return map
 }
-
 function MapView() {
   const mapRef = useRef()
+  const markerMap = useRef(new Map())
+
+  const dispatch = useDispatch()
+  const selectedCCTV = useSelector(state => state.cctvs.selectedCCTV)
+
+  const cctvs = useSelector(selectAllCCTVs)
+
+  const addMarker = (cctv, latlong, msg) => {
+    let [lat, long] = latlong
+    let popup = L.popup()
+    let button = L.DomUtil.create("button")
+    button.textContent = "보기"
+    L.DomEvent.on(button, "click", () => {
+      dispatch(viewCCTV(cctv))
+    })
+    let content = L.DomUtil.create("div", "leaflet-popup-content-root")
+    content.innerHTML = `
+        <p>${msg}</p>
+    `
+    content.appendChild(button)
+    popup.setContent(content)
+    popup.setLatLng(latlong)
+    markerMap.current.set(cctv.ID, popup)
+    L.marker([lat, long])
+      .addTo(mapRef.current)
+      .bindPopup(popup)
+      .on("click", () => {
+        dispatch(setSelectedCCTV(cctv))
+      })
+  }
+
+  useEffect(() => {
+    if (!selectedCCTV) return
+    let popup = markerMap.current.get(selectedCCTV.ID)
+    if (popup.isOpen()) return
+    popup.setLatLng([selectedCCTV.CCTV_Y, selectedCCTV.CCTV_X])
+    popup.openOn(mapRef.current)
+  }, [selectedCCTV])
 
   useLayoutEffect(() => {
     let map = (mapRef.current = setupLeaflet())
@@ -62,13 +91,14 @@ function MapView() {
           },
         })
         // .addTo(map)
-
-        cc.getCrossCctvInfoList.item.forEach((it, idx) => {
-          // it.value = Math.random() * 100
-          addMarker(mapRef.current, [it.CMRA_X_CRDN, it.CMRA_Y_CRDN], it.ISTL_LCTN)
-        })
       })
   }, [])
+
+  useLayoutEffect(() => {
+    cctvs.forEach((it, idx) => {
+      addMarker(it, [it.CCTV_Y, it.CCTV_X], it.NAME)
+    })
+  }, [cctvs])
 
   return (
     <div className={styles.mapView}>
