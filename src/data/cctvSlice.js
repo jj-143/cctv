@@ -17,7 +17,6 @@ const initialState = cctvAdapter.getInitialState({
 export const fetchCCTVs = createAsyncThunk("cctvs/fetchCCTVs", async () => {
   let response
   try {
-    // CORS error
     response = await fetch(cctvUrl(1)).then(d => d.json())
   } catch {
     // fallback
