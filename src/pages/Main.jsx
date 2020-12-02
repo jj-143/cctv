@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useState } from "react"
 import MapView from "../components/MapView"
 import Sidebar from "../components/Sidebar"
 import Header from "../components/Header"

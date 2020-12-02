@@ -1,7 +1,5 @@
-import React, { useState, useLayoutEffect, useRef, useCallback, useEffect } from "react"
-import ReactDOM from "react-dom"
+import React, { useLayoutEffect, useRef, useEffect } from "react"
 import styles from "./MapView.css"
-const url = `https://its.busan.go.kr/traffic/exclude/cctvPopup.do?cctvid=261&title=문전교차로(하).진구&isvr=undefined`
 
 import { selectAllCCTVs, setSelectedCCTV, viewCCTV } from "../data/cctvSlice"
 import { useDispatch, useSelector } from "react-redux"
@@ -45,11 +43,17 @@ function MapView() {
     L.DomEvent.on(button, "click", () => {
       dispatch(viewCCTV(cctv))
     })
+    let newTab = L.DomUtil.create("a")
+    newTab.textContent = "새창"
+    newTab.href = cctv.URL
+    newTab.target = "_blank"
+
     let content = L.DomUtil.create("div", "leaflet-popup-content-root")
     content.innerHTML = `
         <p>${msg}</p>
     `
     content.appendChild(button)
+    content.appendChild(newTab)
     popup.setContent(content)
     popup.setLatLng(latlong)
     markerMap.current.set(cctv.ID, popup)
@@ -78,6 +82,7 @@ function MapView() {
   useLayoutEffect(() => {
     let map = (mapRef.current = setupLeaflet())
 
+    return
     fetch("http://localhost:9191/gadm/json/skorea-municipalities-geo.json")
       .then(d => d.json())
       .then(data => {
