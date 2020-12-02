@@ -4,7 +4,6 @@
     "build": "parcel build ./src/index.html"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.1",
     "@reduxjs/toolkit": "^1.5.0",
     "parcel-bundler": "^1.12.4",
     "postcss": "^8.1.10",
@@ -13,7 +12,7 @@
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2"
   },
-  "name": "frontend-hw-jj",
+  "name": "frontend-cctv-jj",
   "version": "1.0.0",
   "license": "MIT",
   "devDependencies": {},
