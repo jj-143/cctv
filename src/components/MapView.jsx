@@ -64,8 +64,14 @@ function MapView() {
   useEffect(() => {
     if (!selectedCCTV) return
     let popup = markerMap.current.get(selectedCCTV.ID)
+    // center to selected
+    let latlng = [selectedCCTV.CCTV_Y, selectedCCTV.CCTV_X]
+    mapRef.current.panTo(latlng)
+
+    // when marker's got clicked, the popup opens automatically.
     if (popup.isOpen()) return
-    popup.setLatLng([selectedCCTV.CCTV_Y, selectedCCTV.CCTV_X])
+
+    popup.setLatLng(latlng)
     popup.openOn(mapRef.current)
   }, [selectedCCTV])
 

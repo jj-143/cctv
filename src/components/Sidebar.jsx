@@ -4,13 +4,13 @@ import styles from "./Sidebar.css"
 import { useDispatch, useSelector } from "react-redux"
 import { selectAllCCTVs, setSelectedCCTV } from "../data/cctvSlice"
 
-function Sidebar({ show, hide }) {
-  // show only affects under 600px
+function Sidebar({ isShowing, hide }) {
+  // isShowing only affects under 600px width
   const dispatch = useDispatch()
   const cctvs = useSelector(selectAllCCTVs)
 
   return (
-    <div className={styles.sidebar + " " + (show ? styles.show : "")}>
+    <div className={styles.sidebar + " " + (isShowing ? styles.show : "")}>
       <button className={styles.hideButton} onClick={hide}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +27,7 @@ function Sidebar({ show, hide }) {
         <ul className={styles.ul}>
           {cctvs.map(it => {
             return (
-              <li key={it.ID} onClick={() => dispatch(setSelectedCCTV(it))}>
+              <li key={it.ID} onClick={() => (dispatch(setSelectedCCTV(it)), hide())}>
                 {it.NAME}
               </li>
             )
