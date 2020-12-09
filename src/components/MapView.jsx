@@ -20,7 +20,7 @@ function setupLeaflet() {
       tileSize: 512,
       zoomOffset: -1,
       accessToken:
-        "pk.eyJ1IjoiamotZGV2IiwiYSI6ImNraTVtdnkxYjJpbmsycW5tdHpuY2k2ZWUifQ.Nrnc_lOpmYM97HxBgO_RLA",
+        "pk.eyJ1IjoiamotZGV2IiwiYSI6ImNraWdveHd6MTFraDIycHJza3U4MTEyM2kifQ.pclAd-ONYdEfmtKWljmgGA",
     },
   ).addTo(map)
 
